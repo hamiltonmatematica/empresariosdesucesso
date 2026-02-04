@@ -5,6 +5,7 @@ import { Mission } from './components/Mission';
 import { Speakers } from './components/Speakers';
 import { Agenda } from './components/Agenda';
 import { Registration } from './components/Registration';
+import { Venue } from './components/Venue';
 import { Footer } from './components/Footer';
 
 import { Confrarias } from './components/Confrarias';
@@ -23,6 +24,7 @@ function App() {
         <Confrarias />
         <Testimonials />
         <Registration />
+        <Venue />
       </main>
       <Footer />
     </div>
