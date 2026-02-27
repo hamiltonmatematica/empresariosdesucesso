@@ -95,15 +95,15 @@ export const Registration: React.FC = () => {
                 </li>
                 <li className="flex items-start gap-2 text-white text-sm font-medium">
                   <CheckCircle2 size={16} className="text-brand-neon mt-0.5 flex-shrink-0" />
-                  <span>✨ Imersão completa Dia 02</span>
+                  <span>Imersão completa Dia 02</span>
                 </li>
                 <li className="flex items-start gap-2 text-white text-sm font-medium">
                   <CheckCircle2 size={16} className="text-brand-neon mt-0.5 flex-shrink-0" />
-                  <span>✨ Mentorias online pós-evento</span>
+                  <span>Mentorias online pós-evento</span>
                 </li>
                 <li className="flex items-start gap-2 text-white text-sm font-medium">
                   <CheckCircle2 size={16} className="text-brand-neon mt-0.5 flex-shrink-0" />
-                  <span>✨ 03 ingressos para as Confrarias Credinor na Venda do Fred no segundo semestre</span>
+                  <span>03 ingressos para as Confrarias Credinor na Venda do Fred no segundo semestre</span>
                 </li>
               </ul>
 
