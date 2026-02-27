@@ -60,7 +60,7 @@ export const Registration: React.FC = () => {
 
               <div className="mb-6">
                 <p className="text-3xl font-bold text-white mb-2">R$ 99,00</p>
-                
+
               </div>
 
 
@@ -91,7 +91,7 @@ export const Registration: React.FC = () => {
               <ul className="space-y-3 mb-6 text-left">
                 <li className="flex items-start gap-2 text-white text-sm font-medium">
                   <CheckCircle2 size={16} className="text-brand-neon mt-0.5 flex-shrink-0" />
-                  <span>✨ TUDO do Dia 01 (Palestra + Autógrafos)</span>
+                  <span>TUDO do Dia 01</span>
                 </li>
                 <li className="flex items-start gap-2 text-white text-sm font-medium">
                   <CheckCircle2 size={16} className="text-brand-neon mt-0.5 flex-shrink-0" />
@@ -109,7 +109,7 @@ export const Registration: React.FC = () => {
 
               <div className="mb-6">
                 <p className="text-3xl font-bold text-white mb-2">R$ 499,90</p>
-                
+
               </div>
 
 
