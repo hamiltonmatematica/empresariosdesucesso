@@ -34,7 +34,7 @@ export const Registration: React.FC = () => {
           <div className="grid md:grid-cols-2 gap-6 mb-10">
 
             {/* Day 1 Only Option */}
-            <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-6 hover:border-brand-neon/50 transition-all duration-300 group">
+            <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-6 hover:border-brand-neon/50 transition-all duration-300 group flex flex-col">
               <div className="mb-4">
                 <span className="inline-block px-3 py-1 bg-blue-500/20 text-blue-300 text-xs font-bold rounded-full mb-3">
                   DIA 01
@@ -43,7 +43,7 @@ export const Registration: React.FC = () => {
                 <p className="text-gray-400 text-sm mb-4">Experiência noturna exclusiva</p>
               </div>
 
-              <ul className="space-y-3 mb-6 text-left">
+              <ul className="space-y-3 mb-6 text-left flex-grow">
                 <li className="flex items-start gap-2 text-gray-300 text-sm">
                   <CheckCircle2 size={16} className="text-brand-neon mt-0.5 flex-shrink-0" />
                   <span>Palestra com Diego e Fred</span>
@@ -74,7 +74,7 @@ export const Registration: React.FC = () => {
             </div>
 
             {/* Day 1+2 Option */}
-            <div className="bg-gradient-to-br from-brand-neon/10 to-brand-blue/10 border-2 border-brand-neon rounded-2xl p-6 relative overflow-hidden group shadow-[0_0_30px_rgba(0,209,255,0.15)]">
+            <div className="bg-gradient-to-br from-brand-neon/10 to-brand-deep/10 border-2 border-brand-neon rounded-2xl p-6 relative overflow-hidden group shadow-[0_0_30px_rgba(211, 225, 51,0.15)] flex flex-col">
               {/* Popular badge */}
               <div className="absolute top-0 right-0 bg-brand-neon text-brand-dark font-bold text-xs px-4 py-1 rounded-bl-xl">
                 MAIS POPULAR
@@ -88,7 +88,7 @@ export const Registration: React.FC = () => {
                 <p className="text-gray-300 text-sm mb-4">Experiência transformadora de 2 dias</p>
               </div>
 
-              <ul className="space-y-3 mb-6 text-left">
+              <ul className="space-y-3 mb-6 text-left flex-grow">
                 <li className="flex items-start gap-2 text-white text-sm font-medium">
                   <CheckCircle2 size={16} className="text-brand-neon mt-0.5 flex-shrink-0" />
                   <span>TUDO do Dia 01</span>
