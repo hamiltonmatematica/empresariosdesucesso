@@ -60,9 +60,7 @@ export const Registration: React.FC = () => {
 
               <div className="mb-6">
                 <p className="text-3xl font-bold text-white mb-2">R$ 99,00</p>
-                <p className="text-brand-neon font-bold text-sm">
-                  ASSOCIADOS CREDINOR TEM DESCONTO! <br /> PROCURE SEU GERENTE
-                </p>
+                
               </div>
 
 
@@ -101,19 +99,7 @@ export const Registration: React.FC = () => {
                 </li>
                 <li className="flex items-start gap-2 text-white text-sm font-medium">
                   <CheckCircle2 size={16} className="text-brand-neon mt-0.5 flex-shrink-0" />
-                  <span>✨ Almoço incluso</span>
-                </li>
-                <li className="flex items-start gap-2 text-white text-sm font-medium">
-                  <CheckCircle2 size={16} className="text-brand-neon mt-0.5 flex-shrink-0" />
-                  <span>✨ Happy Hour incluso</span>
-                </li>
-                <li className="flex items-start gap-2 text-white text-sm font-medium">
-                  <CheckCircle2 size={16} className="text-brand-neon mt-0.5 flex-shrink-0" />
                   <span>✨ Mentorias online pós-evento</span>
-                </li>
-                <li className="flex items-start gap-2 text-white text-sm font-medium">
-                  <CheckCircle2 size={16} className="text-brand-neon mt-0.5 flex-shrink-0" />
-                  <span>🎁 BÔNUS: Livro autografado</span>
                 </li>
                 <li className="flex items-start gap-2 text-white text-sm font-medium">
                   <CheckCircle2 size={16} className="text-brand-neon mt-0.5 flex-shrink-0" />
@@ -122,10 +108,8 @@ export const Registration: React.FC = () => {
               </ul>
 
               <div className="mb-6">
-                <p className="text-3xl font-bold text-white mb-2">R$ 997,00</p>
-                <p className="text-brand-neon font-bold text-sm">
-                  ASSOCIADOS CREDINOR TEM DESCONTO! <br /> PROCURE SEU GERENTE
-                </p>
+                <p className="text-3xl font-bold text-white mb-2">R$ 499,90</p>
+                
               </div>
 
 
