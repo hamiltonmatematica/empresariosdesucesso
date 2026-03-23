@@ -15,36 +15,11 @@ export const Venue: React.FC = () => {
                     </h2>
 
                     <p className="text-lg md:text-xl text-gray-300 mb-12 text-center">
-                        Confira onde acontecerá cada dia do evento em Montes Claros
+                        Confira onde acontecerá a Imersão em Montes Claros
                     </p>
 
                     {/* Venue Cards */}
                     <div className="space-y-6">
-                        {/* Day 1 */}
-                        <div className="bg-white/5 backdrop-blur-xl border border-brand-neon/30 rounded-2xl p-6 md:p-8 hover:border-brand-neon/50 transition-all duration-300 shadow-[0_0_30px_rgba(211,225,51,0.1)]">
-                            <div className="flex items-start gap-4">
-                                <div className="bg-brand-neon/20 p-3 rounded-xl">
-                                    <MapPin className="text-brand-neon" size={24} />
-                                </div>
-                                <div className="flex-1">
-                                    <div className="flex items-center gap-2 mb-3">
-                                        <span className="inline-block px-3 py-1 bg-brand-deep/50 text-brand-deep text-xs font-bold rounded-full">
-                                            DIA 01
-                                        </span>
-                                    </div>
-                                    <h3 className="text-xl font-bold text-white mb-2">
-                                        Auditório da Sociedade Rural de Montes Claros
-                                    </h3>
-                                    <p className="text-gray-300 text-sm mb-3">
-                                        Parque de Exposições João Alencar Athayde
-                                    </p>
-                                    <p className="text-gray-400 text-sm">
-                                        <strong>Endereço:</strong> Avenida Geraldo Athayde, 1373 – Bairro São João, CEP 39400-292, Montes Claros – MG
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
                         {/* Day 2 */}
                         <div className="bg-white/5 backdrop-blur-xl border border-brand-neon/30 rounded-2xl p-6 md:p-8 hover:border-brand-neon/50 transition-all duration-300 shadow-[0_0_30px_rgba(211,225,51,0.1)]">
                             <div className="flex items-start gap-4">
@@ -54,7 +29,7 @@ export const Venue: React.FC = () => {
                                 <div className="flex-1">
                                     <div className="flex items-center gap-2 mb-3">
                                         <span className="inline-block px-3 py-1 bg-brand-neon/20 text-brand-neon text-xs font-bold rounded-full">
-                                            DIA 02
+                                            IMERSÃO
                                         </span>
                                     </div>
                                     <h3 className="text-xl font-bold text-white mb-2">

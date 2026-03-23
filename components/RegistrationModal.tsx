@@ -104,7 +104,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, on
                         Garantir Ingresso
                     </h2>
                     <p className="text-brand-neon font-semibold">
-                        {ticketType === 'day1' ? '📅 Dia 01 Apenas' : '🎁 Dia 01 + 02 (com Bônus)'}
+                        {'🎁 Imersão + Bônus'}
                     </p>
                 </div>
 
@@ -158,7 +158,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, on
                             required
                         >
                             <option value="" className="bg-brand-dark">Selecione a cidade</option>
-                            {(ticketType === 'day1-2' ? CITIES_FULL : CITIES).map((city) => (
+                            {(CITIES_FULL).map((city) => (
                                 <option key={city.name} value={city.name} className="bg-brand-dark">
                                     {city.name} - {city.date}
                                 </option>
