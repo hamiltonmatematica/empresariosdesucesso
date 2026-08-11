@@ -88,25 +88,21 @@ export const AGENDA_DAY_2: AgendaItem[] = [
 ];
 
 export const CITIES: City[] = [
-  { name: "Montes Claros", date: "10 de Fevereiro" },
-  { name: "Taiobeiras", date: "19 de março" },
-  { name: "Bocaiuva", date: "27 de Março" },
-  { name: "Rio Pardo de Minas", date: "24 de Abril" },
-  { name: "Brasília de Minas", date: "A definir" },
-  { name: "Coração de Jesus", date: "Data a confirmar" },
-  { name: "Corinto", date: "Data a confirmar" },
-  { name: "Guanambi", date: "Data a confirmar" }
+  { name: "Taiobeiras", date: "24/08" },
+  { name: "Salinas", date: "25/08" },
+  { name: "Montes Claros", date: "01/09" },
+  { name: "Coração de Jesus", date: "09/09" },
+  { name: "Capitão Enéas", date: "11/09" },
+  { name: "Francisco Sá", date: "06/10" }
 ];
 
 export const CITIES_FULL: City[] = [
-  { name: "Montes Claros", date: "10 de Fevereiro" },
-  { name: "Taiobeiras", date: "19 de março" },
-  { name: "Bocaiuva", date: "27 de Março" },
-  { name: "Rio Pardo de Minas", date: "24 de Abril" },
-  { name: "Brasília de Minas", date: "A definir" },
-  { name: "Coração de Jesus", date: "Data a confirmar" },
-  { name: "Corinto", date: "Data a confirmar" },
-  { name: "Guanambi", date: "Data a confirmar" }
+  { name: "Taiobeiras", date: "24/08" },
+  { name: "Salinas", date: "25/08" },
+  { name: "Montes Claros", date: "01/09" },
+  { name: "Coração de Jesus", date: "09/09" },
+  { name: "Capitão Enéas", date: "11/09" },
+  { name: "Francisco Sá", date: "06/10" }
 ];
 
 export const BENEFITS: Benefit[] = [

@@ -65,8 +65,7 @@ export const Registration: React.FC = () => {
               </ul>
 
               <div className="mb-6">
-                <p className="text-3xl font-bold text-white mb-2">R$ 499,90</p>
-
+                <p className="text-3xl font-bold text-white mb-2">R$ 399,90</p>
               </div>
 
 

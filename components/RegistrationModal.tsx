@@ -33,27 +33,40 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, on
         setIsSubmitting(true);
 
         try {
-            // Google Forms IDs
-            const FORM_IDS = {
-                'day1': '1FAIpQLSdLKh9SvHHj5ymYkwD8NtdfJ2lTq8JN8xWWra_4cIVIvUbYvg',
-                'day1-2': '1FAIpQLSf3-h-iyKG_jX7LVVdYU3yNR_0p5n3lFyIbtVXSSw5wNMeQMA'
-            };
+            const SCRIPT_URL = ((import.meta as any).env?.VITE_GOOGLE_SCRIPT_URL as string) || '';
 
-            const formId = FORM_IDS[ticketType];
-            const formUrl = `https://docs.google.com/forms/d/e/${formId}/formResponse`;
+            if (SCRIPT_URL) {
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify({
+                        name: formData.name,
+                        phone: formData.phone,
+                        city: formData.city,
+                        ticketType
+                    })
+                });
+            } else {
+                // Google Forms ID (Formulário EMPRESÁRIOS DE SUCESSO - ATUALIZADO)
+                const FORM_IDS = {
+                    'day1': '1FAIpQLSf3-h-iyKG_jX7LVVdYU3yNR_0p5n3lFyIbtVXSSw5wNMeQMA',
+                    'day1-2': '1FAIpQLSf3-h-iyKG_jX7LVVdYU3yNR_0p5n3lFyIbtVXSSw5wNMeQMA'
+                };
 
-            // Criar FormData para enviar ao Google Forms
-            const formDataToSend = new FormData();
-            formDataToSend.append('entry.381075147', formData.name);        // Nome
-            formDataToSend.append('entry.485670633', formData.phone);       // Telefone
-            formDataToSend.append('entry.1904133980', formData.city);       // Cidade
+                const formId = FORM_IDS[ticketType];
+                const formUrl = `https://docs.google.com/forms/d/e/${formId}/formResponse`;
 
-            // Enviar para Google Forms via fetch
-            await fetch(formUrl, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: formDataToSend
-            });
+                const formDataToSend = new FormData();
+                formDataToSend.append('entry.381075147', formData.name);        // Nome
+                formDataToSend.append('entry.485670633', formData.phone);       // Telefone
+                formDataToSend.append('entry.1904133980', formData.city);       // Cidade
+
+                await fetch(formUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: formDataToSend
+                });
+            }
 
             // Aguardar um pouco para garantir que o envio foi processado
             await new Promise(resolve => setTimeout(resolve, 500));

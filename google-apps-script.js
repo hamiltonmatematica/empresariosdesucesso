@@ -1,66 +1,56 @@
-// Google Apps Script for Google Sheets Integration
-// Instructions:
-// 1. Go to https://script.google.com/
-// 2. Create a new project
-// 3. Paste this code
-// 4. Deploy as Web App (Execute as: Me, Who has access: Anyone)
-// 5. Copy the deployment URL and paste it in RegistrationModal.tsx
+// Google Apps Script para a Planilha Empresários de Sucesso Norte de Minas
+// Link da Planilha: https://docs.google.com/spreadsheets/d/1qNdRRrX0j0NXn9US1AldMrPdm0o92Smzj_qUABfbykc/edit
 
 function doPost(e) {
-    try {
-        // Get the active spreadsheet (or specify by ID)
-        const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-
-        // Parse the incoming data
+  try {
+    const ss = SpreadsheetApp.openById('1qNdRRrX0j0NXn9US1AldMrPdm0o92Smzj_qUABfbykc');
+    const sheet = ss.getActiveSheet();
+    
+    // Suporta tanto JSON quanto FormData
+    let name = '', phone = '', city = '', ticketType = '';
+    
+    if (e.postData && e.postData.contents) {
+      try {
         const data = JSON.parse(e.postData.contents);
-
-        // Prepare row data
-        const row = [
-            data.timestamp,
-            data.name,
-            data.phone,
-            data.city,
-            data.date,
-            data.ticketType
-        ];
-
-        // Append to sheet
-        sheet.appendRow(row);
-
-        // Return success response
-        return ContentService
-            .createTextOutput(JSON.stringify({ success: true }))
-            .setMimeType(ContentService.MimeType.JSON);
-
-    } catch (error) {
-        // Return error response
-        return ContentService
-            .createTextOutput(JSON.stringify({
-                success: false,
-                error: error.toString()
-            }))
-            .setMimeType(ContentService.MimeType.JSON);
+        name = data.name || '';
+        phone = data.phone || '';
+        city = data.city || '';
+        ticketType = data.ticketType || '';
+      } catch (err) {
+        name = e.parameter.name || '';
+        phone = e.parameter.phone || '';
+        city = e.parameter.city || '';
+        ticketType = e.parameter.ticketType || '';
+      }
     }
+
+    const timestamp = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
+    const ticketName = ticketType === 'day1-2' ? 'Dia 01 + 02 (Imersão + Bônus)' : 'Dia 01 (Apenas)';
+
+    // Adiciona linha na planilha
+    sheet.appendRow([timestamp, name, phone, city, ticketName]);
+
+    return ContentService
+      .createTextOutput(JSON.stringify({ success: true }))
+      .setMimeType(ContentService.MimeType.JSON);
+
+  } catch (error) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ success: false, error: error.toString() }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
 }
 
-// Optional: Setup function to create headers
 function setupSheet() {
-    const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-    const headers = [
-        'Timestamp',
-        'Nome',
-        'Telefone',
-        'Cidade',
-        'Data do Evento',
-        'Tipo de Ingresso'
-    ];
+  const ss = SpreadsheetApp.openById('1qNdRRrX0j0NXn9US1AldMrPdm0o92Smzj_qUABfbykc');
+  const sheet = ss.getActiveSheet();
+  const headers = ['Data/Hora', 'Nome Completo', 'WhatsApp', 'Cidade do Evento', 'Tipo de Ingresso'];
 
-    // Set headers in first row
+  if (sheet.getLastRow() === 0) {
     sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
-
-    // Format header row
     sheet.getRange(1, 1, 1, headers.length)
-        .setFontWeight('bold')
-        .setBackground('#00d1ff')
-        .setFontColor('#020617');
+      .setFontWeight('bold')
+      .setBackground('#00d1ff')
+      .setFontColor('#020617');
+  }
 }
