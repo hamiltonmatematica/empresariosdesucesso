@@ -105,8 +105,8 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, on
 
             // Links de checkout Asaas
             const paymentLinks = {
-                'standard': 'https://www.asaas.com/c/58mywxnx9264i4xf',
-                'discounted': 'https://www.asaas.com/c/ilsr94el5hln7ytp'
+                'standard': 'https://www.asaas.com/c/vdpy4vry235rqucc',
+                'discounted': 'https://www.asaas.com/c/4tlsev3bd1rzpjkc'
             };
 
             window.location.href = paymentLinks[ticketOption];
