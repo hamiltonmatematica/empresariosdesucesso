@@ -90,7 +90,7 @@ export const AGENDA_DAY_2: AgendaItem[] = [
 export const CITIES: City[] = [
   { name: "Taiobeiras", date: "27/08" },
   { name: "Salinas", date: "28/08" },
-  { name: "Montes Claros", date: "01/09" },
+  { name: "Montes Claros", date: "08/09" },
   { name: "Coração de Jesus", date: "09/09" },
   { name: "Capitão Enéas", date: "11/09" },
   { name: "Francisco Sá", date: "06/10" }
@@ -99,7 +99,7 @@ export const CITIES: City[] = [
 export const CITIES_FULL: City[] = [
   { name: "Taiobeiras", date: "27/08" },
   { name: "Salinas", date: "28/08" },
-  { name: "Montes Claros", date: "01/09" },
+  { name: "Montes Claros", date: "08/09" },
   { name: "Coração de Jesus", date: "09/09" },
   { name: "Capitão Enéas", date: "11/09" },
   { name: "Francisco Sá", date: "06/10" }
