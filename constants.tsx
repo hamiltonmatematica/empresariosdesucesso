@@ -88,19 +88,19 @@ export const AGENDA_DAY_2: AgendaItem[] = [
 ];
 
 export const CITIES: City[] = [
-  { name: "Montes Claros", date: "08/09" },
-  { name: "Coração de Jesus", date: "09/09" },
-  { name: "Capitão Enéas", date: "11/09" },
-  { name: "Francisco Sá", date: "06/10" },
+  { name: "Montes Claros", date: "09/09" },
+  { name: "Coração de Jesus", date: "Em breve" },
+  { name: "Capitão Enéas", date: "Em breve" },
+  { name: "Francisco Sá", date: "Em breve" },
   { name: "Taiobeiras", date: "27/08" },
   { name: "Salinas", date: "28/08" }
 ];
 
 export const CITIES_FULL: City[] = [
-  { name: "Montes Claros", date: "08/09" },
-  { name: "Coração de Jesus", date: "09/09" },
-  { name: "Capitão Enéas", date: "11/09" },
-  { name: "Francisco Sá", date: "06/10" },
+  { name: "Montes Claros", date: "09/09" },
+  { name: "Coração de Jesus", date: "Em breve" },
+  { name: "Capitão Enéas", date: "Em breve" },
+  { name: "Francisco Sá", date: "Em breve" },
   { name: "Taiobeiras", date: "27/08" },
   { name: "Salinas", date: "28/08" }
 ];
