@@ -1,25 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { X, CheckCircle2, ShieldCheck, Building2, CreditCard } from 'lucide-react';
-import { CITIES_FULL } from '../constants';
+import { X, CheckCircle2, ShieldCheck, Building2, CreditCard, QrCode, Sparkles, MapPin } from 'lucide-react';
+import { CITIES_FULL, CITY_PRICING, getCityTier, CityPricingTier } from '../constants';
 import { Button } from './Button';
 
 interface RegistrationModalProps {
     isOpen: boolean;
     onClose: () => void;
     ticketType: 'standard' | 'discounted' | 'day1' | 'day1-2';
+    initialCity?: string;
 }
 
-export const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, ticketType: initialTicketType }) => {
+export const RegistrationModal: React.FC<RegistrationModalProps> = ({ 
+    isOpen, 
+    onClose, 
+    ticketType: initialTicketType,
+    initialCity = 'Montes Claros'
+}) => {
     // Normalizar o ticketType para 'standard' ou 'discounted'
     const normalizedInitial = initialTicketType === 'discounted' ? 'discounted' : 'standard';
 
     const [ticketOption, setTicketOption] = useState<'standard' | 'discounted'>(normalizedInitial);
+    const [paymentMethod, setPaymentMethod] = useState<'credit_card' | 'pix'>('pix');
     const [discountCategory, setDiscountCategory] = useState<'credinor' | 'cdl'>('credinor');
     
     const [formData, setFormData] = useState({
         name: '',
         phone: '',
-        city: '',
+        city: initialCity || 'Montes Claros',
         agency: '',
         account: '',
         cnpjOrCode: ''
@@ -30,14 +37,30 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, on
 
     useEffect(() => {
         setTicketOption(initialTicketType === 'discounted' ? 'discounted' : 'standard');
-    }, [initialTicketType, isOpen]);
+        if (initialCity) {
+            setFormData(prev => ({ ...prev, city: initialCity }));
+        }
+    }, [initialTicketType, initialCity, isOpen]);
 
     if (!isOpen) return null;
+
+    // Determinar a tabela de preços de acordo com a cidade selecionada
+    const currentTier: CityPricingTier = getCityTier(formData.city);
+    const tierPricing = CITY_PRICING[currentTier];
 
     // Checagem visual de validação fake
     const isCredinorValid = formData.agency.trim().length >= 3 && formData.account.trim().length >= 4;
     const isCdlValid = formData.cnpjOrCode.trim().length >= 4;
     const isDiscountValidated = ticketOption === 'discounted' ? (discountCategory === 'credinor' ? isCredinorValid : isCdlValid) : true;
+
+    const getPriceLabel = (option = ticketOption, method = paymentMethod) => {
+        const optionPricing = tierPricing[option];
+        return method === 'pix' ? optionPricing.pix.formatted : optionPricing.card.formatted;
+    };
+
+    const getTargetPaymentUrl = () => {
+        return tierPricing[ticketOption][paymentMethod === 'pix' ? 'pix' : 'card'].url;
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -64,12 +87,16 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, on
 
         try {
             const SCRIPT_URL = ((import.meta as any).env?.VITE_GOOGLE_SCRIPT_URL as string) || '';
+            const price = getPriceLabel();
+            const methodLabel = paymentMethod === 'pix' ? 'PIX / Boleto (À Vista)' : 'Cartão de Crédito (até 5x)';
 
             const payload = {
                 name: formData.name,
                 phone: formData.phone,
                 city: formData.city,
-                ticketType: ticketOption === 'discounted' ? 'Imersão (Associado/Credinor - R$ 349,90)' : 'Imersão (Público Geral - R$ 399,00)',
+                tier: currentTier === 'moc' ? 'Montes Claros' : 'Regional',
+                ticketType: ticketOption === 'discounted' ? `Imersão (Associado/Credinor - ${price})` : `Imersão (Público Geral - ${price})`,
+                paymentMethod: methodLabel,
                 discountCategory: ticketOption === 'discounted' ? discountCategory : 'Sem Desconto',
                 agency: formData.agency,
                 account: formData.account,
@@ -91,7 +118,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, on
                 const formDataToSend = new FormData();
                 formDataToSend.append('entry.381075147', formData.name);
                 formDataToSend.append('entry.485670633', formData.phone);
-                formDataToSend.append('entry.1904133980', formData.city);
+                formDataToSend.append('entry.1904133980', `${formData.city} [${price}]`);
 
                 await fetch(formUrl, {
                     method: 'POST',
@@ -103,13 +130,9 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, on
             // Aguarda meio segundo
             await new Promise(resolve => setTimeout(resolve, 500));
 
-            // Links de checkout Asaas
-            const paymentLinks = {
-                'standard': 'https://www.asaas.com/c/vdpy4vry235rqucc',
-                'discounted': 'https://www.asaas.com/c/4tlsev3bd1rzpjkc'
-            };
-
-            window.location.href = paymentLinks[ticketOption];
+            // Redireciona para o link Asaas correspondente à cidade e forma de pagamento
+            const targetUrl = getTargetPaymentUrl();
+            window.location.href = targetUrl;
 
         } catch (err) {
             console.error('Erro ao enviar dados:', err);
@@ -144,7 +167,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, on
                 </button>
 
                 {/* Header */}
-                <div className="mb-6">
+                <div className="mb-5">
                     <h2 className="text-2xl md:text-3xl font-bold text-white mb-1">
                         Garantir Inscrição
                     </h2>
@@ -154,35 +177,125 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, on
                 </div>
 
                 {/* Ticket Selector Tabs */}
-                <div className="grid grid-cols-2 gap-2 mb-6 bg-white/5 p-1 rounded-xl border border-white/10">
-                    <button
-                        type="button"
-                        onClick={() => setTicketOption('standard')}
-                        className={`py-2 px-3 text-xs md:text-sm font-semibold rounded-lg transition-all ${
-                            ticketOption === 'standard'
-                                ? 'bg-brand-blue text-white shadow-md'
-                                : 'text-gray-400 hover:text-white'
-                        }`}
-                    >
-                        Público Geral
-                        <span className="block text-xs font-normal">R$ 399,00</span>
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => setTicketOption('discounted')}
-                        className={`py-2 px-3 text-xs md:text-sm font-semibold rounded-lg transition-all ${
-                            ticketOption === 'discounted'
-                                ? 'bg-brand-neon text-brand-dark font-bold shadow-md shadow-brand-neon/20'
-                                : 'text-gray-400 hover:text-white'
-                        }`}
-                    >
-                        Com Desconto ✨
-                        <span className="block text-xs font-normal">R$ 349,90</span>
-                    </button>
+                <div className="space-y-1.5 mb-4">
+                    <label className="block text-xs font-medium text-gray-300">
+                        1. Categoria do Ingresso:
+                    </label>
+                    <div className="grid grid-cols-2 gap-2 bg-white/5 p-1 rounded-xl border border-white/10">
+                        <button
+                            type="button"
+                            onClick={() => setTicketOption('standard')}
+                            className={`py-2 px-3 text-xs md:text-sm font-semibold rounded-lg transition-all text-center ${
+                                ticketOption === 'standard'
+                                    ? 'bg-brand-blue text-white shadow-md'
+                                    : 'text-gray-400 hover:text-white'
+                            }`}
+                        >
+                            Público Geral
+                            <span className="block text-xs font-normal">
+                                {getPriceLabel('standard')}
+                            </span>
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setTicketOption('discounted')}
+                            className={`py-2 px-3 text-xs md:text-sm font-semibold rounded-lg transition-all text-center ${
+                                ticketOption === 'discounted'
+                                    ? 'bg-brand-neon text-brand-dark font-bold shadow-md shadow-brand-neon/20'
+                                    : 'text-gray-400 hover:text-white'
+                            }`}
+                        >
+                            Com Desconto ✨
+                            <span className="block text-xs font-normal">
+                                {getPriceLabel('discounted')}
+                            </span>
+                        </button>
+                    </div>
+                </div>
+
+                {/* Payment Method Selector */}
+                <div className="space-y-1.5 mb-5">
+                    <label className="block text-xs font-medium text-gray-300">
+                        2. Forma de Pagamento:
+                    </label>
+                    <div className="grid grid-cols-2 gap-2">
+                        {/* PIX / Boleto */}
+                        <button
+                            type="button"
+                            onClick={() => setPaymentMethod('pix')}
+                            className={`p-2.5 rounded-xl border text-left transition-all relative ${
+                                paymentMethod === 'pix'
+                                    ? 'bg-brand-blue/30 border-brand-neon text-white shadow-[0_0_15px_rgba(0,209,255,0.15)]'
+                                    : 'bg-white/5 border-white/10 text-gray-400 hover:text-white'
+                            }`}
+                        >
+                            <div className="flex items-center justify-between mb-1">
+                                <div className="flex items-center gap-1.5 font-bold text-xs">
+                                    <QrCode size={16} className="text-brand-neon" />
+                                    <span>PIX / Boleto</span>
+                                </div>
+                                <span className="text-[10px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded-full font-bold border border-emerald-500/30 flex items-center gap-0.5">
+                                    <Sparkles size={10} /> À VISTA
+                                </span>
+                            </div>
+                            <p className="text-xs font-bold text-white">
+                                {getPriceLabel(ticketOption, 'pix')}
+                            </p>
+                            <p className="text-[10px] text-gray-400">À vista no PIX</p>
+                        </button>
+
+                        {/* Cartão de Crédito */}
+                        <button
+                            type="button"
+                            onClick={() => setPaymentMethod('credit_card')}
+                            className={`p-2.5 rounded-xl border text-left transition-all ${
+                                paymentMethod === 'credit_card'
+                                    ? 'bg-brand-blue/30 border-brand-neon text-white shadow-[0_0_15px_rgba(0,209,255,0.15)]'
+                                    : 'bg-white/5 border-white/10 text-gray-400 hover:text-white'
+                            }`}
+                        >
+                            <div className="flex items-center gap-1.5 font-bold text-xs mb-1">
+                                <CreditCard size={16} className="text-brand-neon" />
+                                <span>Cartão de Crédito</span>
+                            </div>
+                            <p className="text-xs font-bold text-white">
+                                {getPriceLabel(ticketOption, 'credit_card')}
+                            </p>
+                            <p className="text-[10px] text-brand-neon font-medium">Em até 5x</p>
+                        </button>
+                    </div>
                 </div>
 
                 {/* Form */}
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-3.5">
+                    {/* City Selector First */}
+                    <div>
+                        <label htmlFor="city" className="block text-xs font-medium text-gray-300 mb-1 flex items-center justify-between">
+                            <span className="flex items-center gap-1">
+                                <MapPin size={14} className="text-brand-neon" /> Cidade do Evento *
+                            </span>
+                            {currentTier === 'moc' ? (
+                                <span className="text-[11px] text-brand-neon font-medium">Montes Claros</span>
+                            ) : (
+                                <span className="text-[11px] text-emerald-400 font-medium">Preço Regional Aplicado</span>
+                            )}
+                        </label>
+                        <select
+                            id="city"
+                            name="city"
+                            value={formData.city}
+                            onChange={handleChange}
+                            className="w-full px-4 py-2.5 bg-white/5 border border-brand-neon/40 rounded-lg text-white focus:outline-none focus:border-brand-neon transition-colors text-sm font-medium"
+                            required
+                        >
+                            {CITIES_FULL.map((city) => (
+                                <option key={city.name} value={city.name} className="bg-brand-dark">
+                                    {city.name} - {city.date}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
                     {/* Name */}
                     <div>
                         <label htmlFor="name" className="block text-xs font-medium text-gray-300 mb-1">
@@ -217,31 +330,9 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, on
                         />
                     </div>
 
-                    {/* City */}
-                    <div>
-                        <label htmlFor="city" className="block text-xs font-medium text-gray-300 mb-1">
-                            Cidade do Evento *
-                        </label>
-                        <select
-                            id="city"
-                            name="city"
-                            value={formData.city}
-                            onChange={handleChange}
-                            className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-brand-neon transition-colors text-sm"
-                            required
-                        >
-                            <option value="" className="bg-brand-dark">Selecione a cidade</option>
-                            {CITIES_FULL.map((city) => (
-                                <option key={city.name} value={city.name} className="bg-brand-dark">
-                                    {city.name} - {city.date}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
                     {/* Discount Validation Fields */}
                     {ticketOption === 'discounted' && (
-                        <div className="mt-4 p-4 bg-brand-neon/10 border border-brand-neon/30 rounded-xl space-y-3">
+                        <div className="mt-3 p-3.5 bg-brand-neon/10 border border-brand-neon/30 rounded-xl space-y-2.5">
                             <div className="flex items-center justify-between">
                                 <span className="text-xs font-bold text-brand-neon uppercase tracking-wider flex items-center gap-1.5">
                                     <ShieldCheck size={16} />
@@ -345,7 +436,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, on
                             )}
 
                             <p className="text-[10px] text-gray-400 italic">
-                                * Validação automática de convênio para liberação do valor promocional de R$ 349,90.
+                                * Validação automática de convênio para liberação do valor promocional de {getPriceLabel('discounted')}.
                             </p>
                         </div>
                     )}
@@ -365,9 +456,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, on
                     >
                         {isSubmitting
                             ? 'Validando e Redirecionando...'
-                            : ticketOption === 'discounted'
-                            ? 'Prosseguir para Pagamento (R$ 349,90) →'
-                            : 'Prosseguir para Pagamento (R$ 399,00) →'
+                            : `Prosseguir para Pagamento (${getPriceLabel()}) →`
                         }
                     </Button>
 

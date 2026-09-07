@@ -88,22 +88,65 @@ export const AGENDA_DAY_2: AgendaItem[] = [
 ];
 
 export const CITIES: City[] = [
-  { name: "Taiobeiras", date: "27/08" },
-  { name: "Salinas", date: "28/08" },
   { name: "Montes Claros", date: "08/09" },
   { name: "Coração de Jesus", date: "09/09" },
   { name: "Capitão Enéas", date: "11/09" },
-  { name: "Francisco Sá", date: "06/10" }
+  { name: "Francisco Sá", date: "06/10" },
+  { name: "Taiobeiras", date: "27/08" },
+  { name: "Salinas", date: "28/08" }
 ];
 
 export const CITIES_FULL: City[] = [
-  { name: "Taiobeiras", date: "27/08" },
-  { name: "Salinas", date: "28/08" },
   { name: "Montes Claros", date: "08/09" },
   { name: "Coração de Jesus", date: "09/09" },
   { name: "Capitão Enéas", date: "11/09" },
-  { name: "Francisco Sá", date: "06/10" }
+  { name: "Francisco Sá", date: "06/10" },
+  { name: "Taiobeiras", date: "27/08" },
+  { name: "Salinas", date: "28/08" }
 ];
+
+export type CityPricingTier = 'moc' | 'regional';
+
+export interface TierPricing {
+  standard: {
+    card: { price: number; formatted: string; url: string; installments: string };
+    pix: { price: number; formatted: string; url: string; discountText: string };
+  };
+  discounted: {
+    card: { price: number; formatted: string; url: string; installments: string };
+    pix: { price: number; formatted: string; url: string; discountText: string };
+  };
+}
+
+export const CITY_PRICING: Record<CityPricingTier, TierPricing> = {
+  moc: {
+    standard: {
+      card: { price: 399.00, formatted: 'R$ 399,00', url: 'https://www.asaas.com/c/o6fp68q2hzogqbme', installments: 'em até 5x no cartão' },
+      pix: { price: 379.00, formatted: 'R$ 379,00', url: 'https://www.asaas.com/c/2ul8psrxgxjigxb0', discountText: 'À VISTA NO PIX (5% DE DESCONTO)' }
+    },
+    discounted: {
+      card: { price: 349.90, formatted: 'R$ 349,90', url: 'https://www.asaas.com/c/ezqzaaaweqe8zchy', installments: 'em até 5x no cartão' },
+      pix: { price: 332.00, formatted: 'R$ 332,00', url: 'https://www.asaas.com/c/kl5okzokyvcnp517', discountText: 'À VISTA NO PIX (5% DE DESCONTO)' }
+    }
+  },
+  regional: {
+    standard: {
+      card: { price: 299.00, formatted: 'R$ 299,00', url: 'https://www.asaas.com/c/3sqn6g1nv9dddovx', installments: 'em até 5x no cartão' },
+      pix: { price: 280.00, formatted: 'R$ 280,00', url: 'https://www.asaas.com/c/m3fvtio6rj66bnyl', discountText: 'À VISTA NO PIX / BOLETO' }
+    },
+    discounted: {
+      card: { price: 249.00, formatted: 'R$ 249,00', url: 'https://www.asaas.com/c/8uylk4fqs7upxrub', installments: 'em até 5x no cartão' },
+      pix: { price: 230.00, formatted: 'R$ 230,00', url: 'https://www.asaas.com/c/scdwtw00345w4m21', discountText: 'À VISTA NO PIX / BOLETO' }
+    }
+  }
+};
+
+export const getCityTier = (cityName?: string): CityPricingTier => {
+  if (!cityName) return 'moc';
+  const clean = cityName.toLowerCase().trim();
+  if (clean.includes('montes claros')) return 'moc';
+  return 'regional';
+};
 
 export const BENEFITS: Benefit[] = [
   { title: "Crescer acima da média", icon: TrendingUp },
